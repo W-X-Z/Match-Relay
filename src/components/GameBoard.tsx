@@ -36,7 +36,7 @@ const GameBoard: React.FC = () => {
                 <div 
                   key={card.id}
                   className={`relative scale-[0.7] sm:scale-[0.8] -ml-3 first:ml-0 ${
-                    selectedCards.includes(boardIndex)
+                    !isGameOver && selectedCards.includes(boardIndex)
                       ? 'ring-4 ring-blue-500'
                       : isHinted && isGameOver
                       ? 'ring-4 ring-green-500'

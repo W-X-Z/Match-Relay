@@ -7,6 +7,9 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ card, onClick }) => {
+  // 노란색을 더 진한 색상으로 변경
+  const shapeColor = card.shapeColor === 'yellow' ? '#FFD700' : card.shapeColor;
+
   return (
     <div 
       onClick={onClick}
@@ -15,9 +18,9 @@ const Card: React.FC<CardProps> = ({ card, onClick }) => {
     >
       <div className="w-full h-full flex items-center justify-center">
         <div 
-          className={`w-16 h-16`}
+          className={`w-14 h-14`}
           style={{ 
-            backgroundColor: card.shapeColor,
+            backgroundColor: shapeColor,
             clipPath: card.shapeType === 'circle' 
               ? 'circle(50%)' 
               : card.shapeType === 'triangle'

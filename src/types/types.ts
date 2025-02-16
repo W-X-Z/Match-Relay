@@ -20,7 +20,6 @@ export interface GameState {
   score: number;
   isGameOver: boolean;
   selectedCards: number[];
-  gameOverReason?: string;
   hint?: Hint;
 }
 

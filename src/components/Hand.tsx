@@ -3,7 +3,7 @@ import Card from './Card';
 import { useGameStore } from '../store/gameStore';
 
 const Hand: React.FC = () => {
-  const { hand, placeCard, checkGameEnd, isGameOver, hint } = useGameStore();
+  const { hand, placeCard, checkGameEnd, isGameOver, hint, initGame } = useGameStore();
 
   return (
     <div className="w-full">
@@ -29,11 +29,13 @@ const Hand: React.FC = () => {
           </div>
         </div>
         <button 
-          onClick={checkGameEnd}
-          disabled={isGameOver}
-          className="w-full sm:w-48 px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white disabled:bg-gray-300 disabled:text-gray-500 text-sm font-semibold"
+          onClick={isGameOver ? initGame : checkGameEnd}
+          className={`w-full sm:w-48 px-3 py-2 rounded-lg text-white text-sm font-semibold
+            ${isGameOver 
+              ? 'bg-blue-500 hover:bg-blue-600' 
+              : 'bg-red-500 hover:bg-red-600'}`}
         >
-          No Match
+          {isGameOver ? 'Retry' : 'No Match'}
         </button>
       </div>
     </div>

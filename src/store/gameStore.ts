@@ -126,7 +126,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // 카드를 놓을 수 있는데 "결"을 선언한 경우
       set({
         isGameOver: true,
-        gameOverReason: "아직 놓을 수 있는 카드가 있습니다!",
         hint: possibleMove
       });
     }
