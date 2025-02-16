@@ -6,9 +6,8 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import Hand from './Hand';
 
 const GameBoard: React.FC = () => {
-  const { board, score, selectedCards, selectCard, hint, isGameOver } = useGameStore();
+  const { board, score, selectedCards, selectCard, hint, isGameOver, isPlacingCard } = useGameStore();
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const lastFiveCards = board.slice(-5);
 
   return (
     <div className="w-full min-h-screen bg-gray-200 p-2">
@@ -27,27 +26,31 @@ const GameBoard: React.FC = () => {
         </div>
 
         <div className="flex flex-col gap-4">
-          <div className="flex justify-center">
-            {lastFiveCards.map((card, index) => {
-              const boardIndex = board.length - 5 + index;
-              const isHinted = hint?.boardIndices.includes(boardIndex);
-              
-              return (
-                <div 
-                  key={card.id}
-                  className={`relative scale-[0.7] sm:scale-[0.8] -ml-3 first:ml-0 ${
-                    !isGameOver && selectedCards.includes(boardIndex)
-                      ? 'ring-4 ring-blue-500'
-                      : isHinted && isGameOver
-                      ? 'ring-4 ring-green-500'
-                      : ''
-                  }`}
-                  onClick={() => selectCard(boardIndex)}
-                >
-                  <Card card={card} />
-                </div>
-              );
-            })}
+          <div className="flex justify-center relative overflow-hidden">
+            <div className={`flex transition-all duration-300 ${isPlacingCard ? 'animate-slide-left' : ''}`}>
+              {board.map((card, index) => {
+                const isHinted = hint?.boardIndices.includes(index);
+                const isFirstCard = index === 0;
+                
+                return (
+                  <div 
+                    key={card.id}
+                    className={`relative scale-[0.7] sm:scale-[0.8] -ml-3 first:ml-0 transition-all duration-300
+                      ${!isGameOver && selectedCards.includes(index)
+                        ? 'ring-4 ring-blue-500'
+                        : isHinted && isGameOver
+                        ? 'ring-4 ring-green-500'
+                        : ''
+                      }
+                      ${isFirstCard && isPlacingCard ? 'opacity-0' : ''}
+                    `}
+                    onClick={() => selectCard(index)}
+                  >
+                    <Card card={card} />
+                  </div>
+                );
+              })}
+            </div>
           </div>
           
           <Hand />

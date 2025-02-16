@@ -7,6 +7,7 @@ export interface Card {
   backgroundColor: BackgroundColor;
   shapeType: ShapeType;
   shapeColor: ShapeColor;
+  isMoving?: boolean;
 }
 
 export interface Hint {

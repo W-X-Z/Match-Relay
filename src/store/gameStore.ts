@@ -7,6 +7,7 @@ interface GameStore extends GameState {
   initGame: () => void;
   checkGameEnd: () => void;
   selectCard: (boardIndex: number) => void;
+  isPlacingCard: boolean;
 }
 
 const INITIAL_HAND_SIZE = 5;
@@ -17,6 +18,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   score: 0,
   isGameOver: false,
   selectedCards: [],
+  isPlacingCard: false,
 
   initGame: () => {
     const initialBoard: Card[] = [];
@@ -28,7 +30,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
     
     // 손패 카드 생성
-    for (let i = 0; i < INITIAL_HAND_SIZE; i++) {
+    for (let i = 0; i < 5; i++) {
       initialHand.push(createUniqueRandomCard(i + 5, [...initialBoard, ...initialHand]));
     }
     
@@ -43,8 +45,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   placeCard: (cardIndex: number) => {
     const { hand, board, selectedCards } = get();
-    const cardToPlace = hand[cardIndex];
-    
+    // 선택된 손패 카드에 isMoving 플래그 부여
+    const cardToPlace = { ...hand[cardIndex], isMoving: true };
     if (selectedCards.length !== 2) return;
     
     const selectedBoardCards = [
@@ -55,26 +57,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
     
     const validation = compareAttributes(selectedBoardCards, cardToPlace);
     if (!validation.isValid) return;
-
-    // 먼저 board에 카드를 추가
-    const newBoard = [...board, cardToPlace];
+    
+    // board의 첫 번째 카드를 제거하고, 정답 카드를 오른쪽 끝에 추가 (카드 복사 시 isMoving 플래그 해제)
+    const newBoard = [...board.slice(1), { ...cardToPlace, isMoving: false }];
     
     const newHand = [...hand];
     newHand.splice(cardIndex, 1);
-
-    // board에 추가된 카드를 포함하여 중복 체크
-    const newCard = createUniqueRandomCard(
-      Date.now(), 
-      [...newBoard, ...newHand]
-    );
+    // 새로운 손패 카드를 생성하여 추가
+    const newCard = createUniqueRandomCard(Date.now(), [...newBoard, ...newHand]);
     newHand.push(newCard);
-
-    set(state => ({
-      board: newBoard,
-      hand: newHand,
-      score: state.score + 1,
-      selectedCards: []
-    }));
+    
+    // 애니메이션 실행 플래그 활성화
+    set({ isPlacingCard: true });
+    
+    setTimeout(() => {
+      set({
+        board: newBoard,
+        hand: newHand,
+        score: get().score + 1,
+        selectedCards: [],
+        isPlacingCard: false
+      });
+    }, 300);
   },
 
   checkGameEnd: () => {

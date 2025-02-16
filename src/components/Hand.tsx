@@ -3,7 +3,7 @@ import Card from './Card';
 import { useGameStore } from '../store/gameStore';
 
 const Hand: React.FC = () => {
-  const { hand, placeCard, checkGameEnd, isGameOver, hint, initGame } = useGameStore();
+  const { hand, placeCard, checkGameEnd, isGameOver, hint, initGame, isPlacingCard } = useGameStore();
 
   return (
     <div className="w-full">
@@ -13,11 +13,13 @@ const Hand: React.FC = () => {
             {hand.map((card, index) => (
               <div 
                 key={card.id}
-                className={`scale-[0.7] sm:scale-[0.8] -ml-3 first:ml-0 ${
-                  isGameOver && hint?.handIndex === index
+                className={`scale-[0.7] sm:scale-[0.8] -ml-3 first:ml-0 transition-all duration-300
+                  ${isGameOver && hint?.handIndex === index
                     ? 'ring-4 ring-green-500'
                     : ''
-                }`}
+                  }
+                  ${card.isMoving ? 'animate-slide-to-board' : ''}
+                `}
               >
                 <Card 
                   key={card.id} 
