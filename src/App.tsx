@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import GameBoard from './components/GameBoard';
-import Hand from './components/Hand';
 import GameOverModal from './components/GameOverModal';
 import { useGameStore } from './store/gameStore';
 
@@ -14,7 +13,6 @@ const App: React.FC = () => {
   return (
     <div className="relative">
       <GameBoard />
-      <Hand />
       <GameOverModal />
     </div>
   );

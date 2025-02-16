@@ -10,7 +10,7 @@ const Card: React.FC<CardProps> = ({ card, onClick }) => {
   return (
     <div 
       onClick={onClick}
-      className={`w-24 h-32 rounded-lg p-2 cursor-pointer transition-transform hover:scale-105`}
+      className={`w-20 h-28 rounded-lg p-2 cursor-pointer transition-transform hover:scale-105`}
       style={{ backgroundColor: card.backgroundColor }}
     >
       <div className="w-full h-full flex items-center justify-center">
